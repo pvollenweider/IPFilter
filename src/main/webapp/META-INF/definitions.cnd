@@ -1,0 +1,7 @@
+<jnt = 'http://www.jahia.org/jahia/nt/1.0'>
+<jmix = 'http://www.jahia.org/jahia/mix/1.0'>
+[jmix:ipRestriction] mixin
+ extends=jnt:page
+ itemtype=options
+  - ipRangeList (string) = '192.168.1.0/24,192.168.2.0/24'
+  - testIp (string)
