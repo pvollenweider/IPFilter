@@ -1,1 +1,76 @@
-IP Filter
+IP FilterIP Filtering
+
+* Goals Overview
+
+  This module is used in Live Mode of the application to provide some IP filtering feature.
+  It allows you to choose to deny IPs to access your site, or to restrict the access to your site to some IPs.
+
+* Enable IP filtering
+
+  Once this module is deployed on your server, you can access to this filter through the option tab of your site settings
+
+  [[1]] In edit mode, right click on your site (the root node of your site) and select the edit entry of the menu.
+
+[images/edit_site.png]
+
+  [[2]] Then go to the "options" tab and check the "IP restrictions" box.
+
+[images/enable.png]
+
+* Disable IP filtering
+
+  To disable the IP filtering, you just need to uncheck the "IP restrictions" box.
+
+* Deny rule
+
+  Use the deny rule to ban some IPs on your site.
+
+* Only allow rule
+
+  Use the only allow rule to restrict the access to your site to some IPs
+
+* IP ranges syntax
+
+  In the "IP ranges" field, you can add either add IPs range or Single IPs. Use comma separator to add multiple inputs.
+  IPs range should be in CIDR format. For instance 192.168.1.0/24 will match IPs from 192.168.1.0 to 192.168.1.255
+
+  * See the wikipedia page on CIDR {{{http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing}http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing}}
+
+  Here is a full example to match both CHINANET and UNICOM IPs ranges.
+
++-----------------------
+222.176.0.0/12, 60.0.0.0/7
++-----------------------
+
+  To specify a single IP or several IPs, you need to specify the 32 as bitmask. For instance this will match 192.168.1.2 and 192.168.1.25
+
++-----------------------
+192.168.1.2/32, 192.168.1.25/32
++-----------------------
+
+  Of course you can mix single IPs and IP ranges.
+
+* Test IP
+
+  The "Test IP" field is a debugging field. It's very useful to check if your IPs ranges are correct. When accessing the server through localhost you can use the "Test IP" value as a fake remote IP instead of your real IP.
+  Don't forget to remove the "Test IP" when your tests are finished.
+
+* Snapshots
+
+  Here is an example to exclude some IPs on your website. This is very useful to prevent spam from banned IPs.
+
+[images/deny.png]
+
+  Here is an example to allow access to the website only for several IPs. This is very useful for development stage on a public server.
+
+[images/onlyallow.png]
+
+* Enable log4j
+
+  If you need to have log informations on IP filtering, you can add such category on your log4j config file
+
++-----------------------
+    <category name="org.jahia.service.render.filter.IPFilter">
+        <priority value="warn"/>
+    </category>
++-----------------------
