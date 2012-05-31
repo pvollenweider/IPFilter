@@ -50,11 +50,6 @@ IP FilterIP Filtering
 
   Of course you can mix single IPs and IP ranges.
 
-* Test IP
-
-  The "Test IP" field is a debugging field. It's very useful to check if your IPs ranges are correct. When accessing the server through localhost you can use the "Test IP" value as a fake remote IP instead of your real IP.
-  Don't forget to remove the "Test IP" when your tests are finished.
-
 * Snapshots
 
   Here is an example to exclude some IPs on your website. This is very useful to prevent spam from banned IPs.

@@ -25,14 +25,10 @@ public class IPFilter extends AbstractFilter {
 
     public String prepare(RenderContext renderContext, Resource resource, RenderChain chain) throws Exception {
         String currentAddress = renderContext.getRequest().getRemoteAddr();
-        JCRNodeWrapper siteNode = (JCRNodeWrapper) renderContext.getSite();
+        JCRNodeWrapper siteNode = renderContext.getSite();
         String filterType = siteNode.hasProperty("filterType") ? siteNode.getProperty("filterType").getString() : null;
         if (filterType != null) {
             logger.debug("filterType is [" + filterType + "]");
-            if ("127.0.0.1".equals(currentAddress)) {
-                // on localhost we use the testIP value as fake currentAddress
-                currentAddress = siteNode.hasProperty("testIp") ? siteNode.getProperty("testIp").getString().trim() : null;
-            }
             if (currentAddress != null) {
                 String ipRangeList = siteNode.hasProperty("ipRangeList") ? siteNode.getProperty("ipRangeList").getString() : null;
                 if (ipRangeList != null) {
@@ -62,12 +58,12 @@ public class IPFilter extends AbstractFilter {
         }
         String delimiter = ",";
         String[] ranges = ipRangeList.split(delimiter);
-        for (int i = 0; i < ranges.length; i++) {
-            String subnetCidr = ranges[i].trim();
-            if (subnetCidr != null && ! "".equals(subnetCidr)) {
+        for (String range : ranges) {
+            String subnetCidr = range.trim();
+            if (subnetCidr != null && !"".equals(subnetCidr)) {
                 int idx = subnetCidr.indexOf("/32");
                 if (idx != -1) {
-                    String standaloneIp = subnetCidr.substring(0,idx);
+                    String standaloneIp = subnetCidr.substring(0, idx);
                     return standaloneIp.equals(address);
                 } else {
                     try {
@@ -76,7 +72,7 @@ public class IPFilter extends AbstractFilter {
                             return true;
                         }
                     } catch (IllegalArgumentException iae) {
-                        logger.error("Could not parse [" + subnetCidr + "]");
+                        logger.error("Could not parse [" + subnetCidr + "] as CIDR-notation");
                     }
                 }
             }
