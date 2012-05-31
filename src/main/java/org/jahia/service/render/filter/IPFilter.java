@@ -28,6 +28,7 @@ public class IPFilter extends AbstractFilter {
         JCRNodeWrapper siteNode = (JCRNodeWrapper) renderContext.getSite();
         String filterType = siteNode.hasProperty("filterType") ? siteNode.getProperty("filterType").getString() : null;
         if (filterType != null) {
+            logger.debug("filterType is [" + filterType + "]");
             if ("127.0.0.1".equals(currentAddress)) {
                 // on localhost we use the testIP value as fake currentAddress
                 currentAddress = siteNode.hasProperty("testIp") ? siteNode.getProperty("testIp").getString().trim() : null;
@@ -62,15 +63,21 @@ public class IPFilter extends AbstractFilter {
         String delimiter = ",";
         String[] ranges = ipRangeList.split(delimiter);
         for (int i = 0; i < ranges.length; i++) {
-            String range = ranges[i].trim();
-            if (range != null && ! "".equals(range)) {
-                try {
-                    SubnetUtils subnetUtils = new SubnetUtils(range);
-                    if (subnetUtils.getInfo().isInRange(address)) {
-                        return true;
+            String subnetCidr = ranges[i].trim();
+            if (subnetCidr != null && ! "".equals(subnetCidr)) {
+                int idx = subnetCidr.indexOf("/32");
+                if (idx != -1) {
+                    String standaloneIp = subnetCidr.substring(0,idx);
+                    return standaloneIp.equals(address);
+                } else {
+                    try {
+                        SubnetUtils subnetUtils = new SubnetUtils(subnetCidr);
+                        if (subnetUtils.getInfo().isInRange(address)) {
+                            return true;
+                        }
+                    } catch (IllegalArgumentException iae) {
+                        logger.error("Could not parse [" + subnetCidr + "]");
                     }
-                } catch (IllegalArgumentException iae) {
-                    logger.error("Could not parse [" + range + "]");
                 }
             }
         }
