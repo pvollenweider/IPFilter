@@ -56,14 +56,21 @@ public class IPFilter extends AbstractFilter {
     }
 
     private boolean isInRange(String address, String ipRangeList) {
-        if (ipRangeList != null) {
-            String delimiter = ",";
-            String[] ranges = ipRangeList.split(delimiter);
-            for (int i = 0; i < ranges.length; i++) {
-                String range = ranges[i].trim();
-                SubnetUtils utils = new SubnetUtils(range);
-                if (utils.getInfo().isInRange(address)) {
-                    return true;
+        if (ipRangeList == null || address == null) {
+            return false;
+        }
+        String delimiter = ",";
+        String[] ranges = ipRangeList.split(delimiter);
+        for (int i = 0; i < ranges.length; i++) {
+            String range = ranges[i].trim();
+            if (range != null && ! "".equals(range)) {
+                try {
+                    SubnetUtils subnetUtils = new SubnetUtils(range);
+                    if (subnetUtils.getInfo().isInRange(address)) {
+                        return true;
+                    }
+                } catch (IllegalArgumentException iae) {
+                    logger.error("Could not parse [" + range + "]");
                 }
             }
         }
