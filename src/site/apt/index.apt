@@ -3,11 +3,12 @@ IP FilterIP Filtering
 * Goals Overview
 
   This module is used in Live Mode of the application to provide some IP filtering feature.
-  It allows you to choose to deny IPs to access your site, or to restrict the access to your site to some IPs.
+  It allows you to choose to deny IPs or subnets to access your site.
+  You can also restrict the access to your site for some IPs or subnets.
 
 * Enable IP filtering
 
-  Once this module is deployed on your server, you can access to this filter through the option tab of your site settings
+  Once this module is deployed on your server and in your site, you can access to this filter through the option tab of your site settings.
 
   [[1]] In edit mode, right click on your site (the root node of your site) and select the edit entry of the menu.
 
@@ -23,32 +24,36 @@ IP FilterIP Filtering
 
 * Deny rule
 
-  Use the deny rule to ban some IPs on your site.
+  Use the deny rule to ban some IPs or subnets on your site.
 
 * Only allow rule
 
-  Use the only allow rule to restrict the access to your site to some IPs
+  Use the only allow rule to restrict the access to your site to some IPs or subnets
 
-* IP ranges syntax
+* IP/subnet syntax
 
-  In the "IP ranges" field, you can add either add IPs range or Single IPs. Use comma separator to add multiple inputs.
-  IPs range should be in CIDR format. For instance 192.168.1.0/24 will match IPs from 192.168.1.0 to 192.168.1.255
+  In the "IP/Subnet" field, you can add either add single IPs or subnets. Use comma separator to add multiple inputs.
+  Subnet should be in CIDR format. For instance 192.168.1.0/24 will match IPs from 192.168.1.0 to 192.168.1.255
 
   * See the wikipedia page on CIDR {{{http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing}http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing}}
 
-  Here is a full example to match both CHINANET and UNICOM IPs ranges.
+  Here is a full example to match both CHINANET and UNICOM subnets.
 
 +-----------------------
 222.176.0.0/12, 60.0.0.0/7
 +-----------------------
 
-  To specify a single IP or several IPs, you need to specify the 32 as bitmask. For instance this will match 192.168.1.2 and 192.168.1.25
+  You can also specify single IP(s). For instance this will match 192.168.1.2 and 192.168.1.25
 
 +-----------------------
-192.168.1.2/32, 192.168.1.25/32
+192.168.1.2, 192.168.1.25
 +-----------------------
 
-  Of course you can mix single IPs and IP ranges.
+  Of course you can mix single IPs and subnets.
+
++-----------------------
+222.176.0.0/12, 60.0.0.0/7, 192.168.1.2, 192.168.1.25
++-----------------------
 
 * Snapshots
 
@@ -56,9 +61,6 @@ IP FilterIP Filtering
 
 [images/deny.png]
 
-  Here is an example to allow access to the website only for several IPs. This is very useful for development stage on a public server.
-
-[images/onlyallow.png]
 
 * Enable log4j
 

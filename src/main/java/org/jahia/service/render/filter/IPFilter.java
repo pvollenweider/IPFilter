@@ -65,6 +65,8 @@ public class IPFilter extends AbstractFilter {
                 if (idx != -1) {
                     String standaloneIp = subnetCidr.substring(0, idx);
                     return standaloneIp.equals(address);
+                } else if (subnetCidr.indexOf("/") == -1){
+                    return subnetCidr.equals(address);
                 } else {
                     try {
                         SubnetUtils subnetUtils = new SubnetUtils(subnetCidr);
@@ -72,7 +74,7 @@ public class IPFilter extends AbstractFilter {
                             return true;
                         }
                     } catch (IllegalArgumentException iae) {
-                        logger.error("Could not parse [" + subnetCidr + "] as CIDR-notation");
+                        logger.error("Could not parse [" + subnetCidr + "]. Please use as CIDR-notation.");
                     }
                 }
             }
