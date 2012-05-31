@@ -28,9 +28,9 @@ IP FilterIP Filtering
 
 * Only allow rule
 
-  Use the only allow rule to restrict the access to your site to some IPs or subnets
+  Use the only allow rule to restrict the access to your site only to some IPs or subnets.
 
-* IP/subnet syntax
+* IP/Subnet syntax
 
   In the "IP/Subnet" field, you can add either add single IPs or subnets. Use comma separator to add multiple inputs.
   Subnet should be in CIDR format. For instance 192.168.1.0/24 will match IPs from 192.168.1.0 to 192.168.1.255
@@ -57,14 +57,14 @@ IP FilterIP Filtering
 
 * Snapshots
 
-  Here is an example to exclude some IPs on your website. This is very useful to prevent spam from banned IPs.
+  Here is an example to exclude some subnets on your website. This is very useful to prevent spam from banned IPs.
 
 [images/deny.png]
 
 
 * Enable log4j
 
-  If you need to have log informations on IP filtering, you can add such category on your log4j config file
+  You can have log informations on IP filtering, by adding following lines in your log4j config file
 
 +-----------------------
     <category name="org.jahia.service.render.filter.IPFilter">
